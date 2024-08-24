@@ -1,6 +1,7 @@
 'use strict';
 
 const { Device } = require('homey');
+const { clearInterval } = require('node:timers');
 const { IVTClient } = require('../../lib/bosch-xmpp');
 const Capabilities = require('../../lib/capabilities');
 const ErrorCodes = require('../../lib/errorcodes');
@@ -15,14 +16,11 @@ class HeatPumpDevice extends Device {
       throw e;
     }
 
-    const updateInterval = Number(this.getSetting('interval')) * 1000;
     this.data = this.getData();
 
-    this.log(`[${this.getName()}][${this.data.id}]`, `Update Interval: ${updateInterval}`);
     this.log(`[${this.getName()}][${this.data.id}]`, 'Connected to device');
-    this.interval = setInterval(async () => {
-      await this.getDeviceData();
-    }, updateInterval);
+
+    await this.startUpdateInterval();
 
     this.log('IVT heat pump device has been initialized');
   }
@@ -112,7 +110,6 @@ class HeatPumpDevice extends Device {
   }
 
   async onSettings({ oldSettings, newSettings, changedKeys }) {
-    const { interval } = this;
     for (const name of changedKeys) {
       if (name !== 'password') {
         this.log(`Setting '${name}' changed from '${oldSettings[name]}' to '${newSettings[name]}'`);
@@ -120,16 +117,28 @@ class HeatPumpDevice extends Device {
     }
     if (oldSettings.interval !== newSettings.interval) {
       this.log(`Deleting old interval of ${oldSettings.interval}s and creating new ${newSettings.interval}s`);
-      clearInterval(interval);
-      this.setUpdateInterval(newSettings.interval);
+      await this.startUpdateInterval(newSettings.interval);
     }
+  }
+
+  async startUpdateInterval(newInterval) {
+    const updateInterval = Number(newInterval || this.getSetting('interval')) * 1000;
+
+    this.log(`[${this.getName()}][${this.data.id}]`, `Update Interval: ${updateInterval}`);
+    if (this.interval) {
+      clearInterval(this.interval);
+    }
+    this.interval = setInterval(async () => {
+      await this.getDeviceData();
+    }, updateInterval);
   }
 
   async getClient(settings) {
     const client = IVTClient({
-      serialNumber: settings.serial,
+      host: settings.host,
+      serialNumber: settings.serial, // @deprecated
       accessKey: settings.key,
-      password: settings.password,
+      password: settings.password, // @deprecated
     });
 
     await client.connect();

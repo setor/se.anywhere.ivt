@@ -1,11 +1,12 @@
 {
-    "settings": {
-      "title": "IVT Värmepump information",
-      "subtitle": "Denna informationen hittar du på ett klistermärke i värmepumpen.",
-      "serial": "Serienummer ('login name' på vissa enheter)",
-      "key": "Accessnyckel ('password' på vissa enheter)",
-      "password": "Lösenord (lösnordet du valde till värmepumpen när du konfigurerade IVT Anywhere)",
-      "interval": "Pollningsintervall, sekunder",
-      "connect": "Anslut"
-    }
+  "settings": {
+    "title": "IVT Värmepump information",
+    "subtitle": "Denna informationen hittar du på ett klistermärke i värmepumpen.",
+    "host": "Hostname/IP of the heat pump",
+    "serial": "Serienummer ('login name' på vissa enheter)",
+    "key": "Accessnyckel ('password' på vissa enheter)",
+    "password": "Lösenord (lösnordet du valde till värmepumpen när du konfigurerade IVT Anywhere)",
+    "interval": "Pollningsintervall, sekunder",
+    "connect": "Anslut"
   }
+}

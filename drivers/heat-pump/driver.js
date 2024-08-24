@@ -12,11 +12,12 @@ class HeatPumpDriver extends Homey.Driver {
       const pairingDevice = {
         name: 'IVT Heat pump',
         data: {
-          id: data.serial,
+          id: data.serial, // @deprecated
         },
         settings: {
+          host: data.host,
           interval: data.interval,
-          serial: data.serial,
+          serial: data.serial, // @deprecated
           key: data.key,
           password: data.password,
         },

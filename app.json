@@ -203,6 +203,19 @@
           },
           "children": [
             {
+              "id": "host",
+              "type": "text",
+              "label": {
+                "en": "Hostname/IP",
+                "sv": "Hostname/IP"
+              },
+              "hint": {
+                "en": "The Hostname/IP of your IVT Heat pump.",
+                "sv": "The Hostname/IP of your IVT Heat pump."
+              },
+              "value": "-"
+            },
+            {
               "id": "serial",
               "type": "text",
               "label": {
